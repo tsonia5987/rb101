@@ -1,0 +1,32 @@
+1. add numbers
+   return sum
+
+SET sum to num1 + num2
+PRINT sum
+
+2:
+iterate array of strings
+set result string
+add each string in array at iterator index to result string
+return string
+
+SET result to empty string
+FOR string_arr
+  SET result to string_arr at iterator
+PRINT result
+
+3:
+iterate through array of strings
+get index of every other element
+add element to the new array
+print new array
+
+SET new_array to empty array
+SET new_array_index to 0
+FOR string_arr
+  if iterator at odd index
+     SET new_array at new_array_index to iterator at string_arr 
+     SET new_array_index to self plus 1
+  else move to next iteration
+PRINT new_array
+ 
