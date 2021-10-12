@@ -1,0 +1,6 @@
+input: string
+output: array
+rules:
+	- return substrings that are plaindromes
+	- palindromes are case sensitive('abA' not palindrome)
+	- empty string and strings with no palindromes returns empty array
