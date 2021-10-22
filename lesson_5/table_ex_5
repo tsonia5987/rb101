@@ -1,0 +1,8 @@
+map/arr/none/new nested array of doubled nums of subarrays/ none
+block/subarray/none/new doubled nums of subarray/used in transofrmation in map
+map/subarray/none/new array of doubled nums of subarray/rv of block
+inner block/each num in subarray/ none/ double of num/ rv used in map
+*/each num/none/ double of num/ rv of block
+
+output: none
+return: [[2,4],[6,8]]

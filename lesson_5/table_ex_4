@@ -1,0 +1,18 @@
+action / object / side effect / return value / rv used?
+
+variable assignment / outer array / none / outer array / no
+
+method call (each) / outer array / none / same outer array / assigned to my_arr
+
+block execution / each sub-array / none / the sub-array / not used
+
+method call (each) / each sub-array / none / the sub-array / used as rv for block
+
+block execution / each integer in sub-array / none / nil / not used
+
+conditional (if) / each integer in sub-array / none / nil if true or false / used as rv of block
+
+method call (puts) / each integer that returns truthy value in conditional ( > 5) in sub-array / outputs string representation of integer / nil / used as return value of if conditional
+
+output: 18, 7, 12
+return: [[18, 7], [3, 12]]
