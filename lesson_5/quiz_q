@@ -1,0 +1,4 @@
+todo[1][:todos][0][:completed] = true
+todo[1][:todos].each {|hsh| hsh[:completed] = true}??
+todo[1][:todos] = todo[1][:todos].map {|hsh| hsh[:completed] = true
+	hsh} ??
