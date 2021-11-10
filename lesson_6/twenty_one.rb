@@ -1,7 +1,7 @@
 require 'pry'
 
 SUITS = ['H', 'D', 'C', 'S']
-VALUES = (2..10).to_a.map {|v| v.to_s} + ['J', 'Q', 'K', 'A']
+VALUES = (2..10).to_a.map(&:to_s) + ['J', 'Q', 'K', 'A']
 
 def prompt(msg)
   puts "==> #{msg}"
@@ -9,7 +9,7 @@ end
 
 def initialize_deck
   deck = []
-  SUITS.each do |suit| 
+  SUITS.each do |suit|
     VALUES.each do |value|
       deck << [suit, value]
     end
@@ -19,7 +19,7 @@ end
 
 def select_cards(deck, num_cards)
   hand = []
-  num_cards.times do 
+  num_cards.times do
     card =  deck.sample
     hand << card
     deck.delete(hand)
@@ -28,7 +28,7 @@ def select_cards(deck, num_cards)
 end
 
 def busted?(hand)
-  total(hand) > 21 ? true : false
+  total(hand) > 21
 end
 
 def total(cards)
@@ -61,8 +61,6 @@ def detect_winner(player_hand, dealer_hand)
     'Player'
   elsif dealer_total > player_total
     'Dealer'
-  else
-    nil
   end
 end
 
@@ -71,7 +69,7 @@ def display_winner(winner, player_hand, dealer_hand)
   prompt "Player hand total: #{total(player_hand)}"
   prompt "Dealer hand: #{dealer_hand}"
   prompt "Dealer hand total: #{total(dealer_hand)}"
-  if winner == nil
+  if !winner
     prompt "It's a tie!"
   else
     prompt "#{winner} wins!"
@@ -79,59 +77,53 @@ def display_winner(winner, player_hand, dealer_hand)
 end
 
 loop do
-  response = nil
+  system("clear")
+
+  deck = initialize_deck
+  player_hand = select_cards(deck, 2)
+  dealer_hand = select_cards(deck, 2)
+  prompt "Dealer hand: #{dealer_hand[0]} and ?"
+
+  answer = nil
+  loop do
+    prompt "Your hand: #{player_hand}"
+    prompt "Your total: #{total(player_hand)}"
+    prompt "hit or stay?"
+    answer = gets.chomp
+    break if answer == 'stay'
+    player_hand += select_cards(deck, 1)
+    break if busted?(player_hand)
+  end
+
+  if busted?(player_hand)
+    prompt "Your hand: #{player_hand}"
+    prompt "Your total: #{total(player_hand)}"
+    prompt "You were busted! Play again? (y/n)"
+    response = gets.chomp
+    response.downcase == 'y' ? next : break
+  else
+    prompt "You chose to stay!"
+  end
 
   loop do
-    system("clear")
-
-    deck = initialize_deck
-    player_hand = select_cards(deck, 2)
-    dealer_hand = select_cards(deck, 2)
-    prompt "Dealer hand: #{dealer_hand}"
-
-    answer = nil
-    loop do
-      prompt "Your hand: #{player_hand}"
-      prompt "Your total: #{total(player_hand)}"
-      prompt "hit or stay?"
-      answer = gets.chomp
-      break if answer == 'stay'
-      player_hand += select_cards(deck, 1)
-      break if busted?(player_hand)
-    end
-
-    if busted?(player_hand)
-      prompt "Your hand: #{player_hand}"
-      prompt "Your total: #{total(player_hand)}"
-      prompt "You were busted! Play again? (y/n)"
-      response = gets.chomp
-      break
-    else
-      prompt "You chose to stay!"
-    end
-
-    loop do
-      break if total(dealer_hand) >= 17
-      dealer_hand += select_cards(deck, 1)
-      break if busted?(dealer_hand)
-    end
-
-    if busted?(dealer_hand)
-      prompt "Dealer hand: #{dealer_hand}"
-      prompt "Dealer hand total: #{total(dealer_hand)}"
-      prompt "Dealer was busted! Play again? (y/n)"
-      response = gets.chomp
-      break
-    else
-      prompt "Dealer chose to stay!"
-    end
-
-    winner = detect_winner(player_hand, dealer_hand)
-    display_winner(winner, player_hand, dealer_hand)
-
-    prompt "Play again? (y/n)"
-    response = gets.chomp
-    break
+    break if total(dealer_hand) >= 17
+    dealer_hand += select_cards(deck, 1)
   end
+
+  if busted?(dealer_hand)
+    prompt "Dealer hand: #{dealer_hand}"
+    prompt "Dealer hand total: #{total(dealer_hand)}"
+    prompt "Dealer was busted! Play again? (y/n)"
+    response = gets.chomp
+    response.downcase == 'y' ? next : break
+  else
+    prompt "Dealer chose to stay!"
+  end
+
+  winner = detect_winner(player_hand, dealer_hand)
+  display_winner(winner, player_hand, dealer_hand)
+
+  prompt "Play again? (y/n)"
+  response = gets.chomp
   break unless response.downcase == 'y'
 end
